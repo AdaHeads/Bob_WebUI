@@ -118,6 +118,9 @@ class ReceptionSelector extends ViewWidget {
         _pickedUpCalls.add(newCall);
         _ui.resetFilter();
         _ui.changeActiveReception(newCall.receptionID);
+      } else {
+        print(
+            '!!!! inbound: ${newCall.inbound} - noCall: ${newCall != ORModel.Call.noCall} - currentUser: ${newCall.assignedTo == _appState.currentUser.id} - pickedUpCalls: ${!_pickedUpCalls.any((ORModel.Call c) => c.ID == newCall.ID)}');
       }
     });
   }
