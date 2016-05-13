@@ -84,7 +84,8 @@ class UIMyCallQueue extends UIModel {
     final SpanElement callWaitTimer = new SpanElement()
       ..style.pointerEvents = 'none'
       ..classes.add('call-wait-time')
-      ..text = new DateTime.now().difference(call.arrived).inSeconds.toString();
+      ..text = new DateTime.now().difference(call.arrived).inSeconds.toString()
+      ..title = call.ID;
 
     numbersAndStateDiv.children.addAll([callDesc, callWaitTimer]);
 

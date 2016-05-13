@@ -69,6 +69,7 @@ class UIGlobalCallQueue extends UIModel {
 
     final SpanElement callWaitTimer = new SpanElement()
       ..classes.add('call-wait-time')
+      ..title = call.ID
       ..text = new DateTime.now()
           .difference(call.arrived)
           .inSeconds
