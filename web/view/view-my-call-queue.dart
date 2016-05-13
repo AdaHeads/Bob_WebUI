@@ -52,11 +52,15 @@ class MyCallQueue extends ViewWidget {
     _observers();
   }
 
-  @override Controller.Destination get _destination => _myDestination;
-  @override Model.UIMyCallQueue get _ui => _uiModel;
+  @override
+  Controller.Destination get _destination => _myDestination;
+  @override
+  Model.UIMyCallQueue get _ui => _uiModel;
 
-  @override void _onBlur(Controller.Destination _) {}
-  @override void _onFocus(Controller.Destination _) {}
+  @override
+  void _onBlur(Controller.Destination _) {}
+  @override
+  void _onFocus(Controller.Destination _) {}
 
   /**
    * Simply navigate to my [Destination]. Matters not if this widget is already
