@@ -84,8 +84,7 @@ class UIMyCallQueue extends UIModel {
     final SpanElement callWaitTimer = new SpanElement()
       ..style.pointerEvents = 'none'
       ..classes.add('call-wait-time')
-      ..text = new DateTime.now().difference(call.arrived).inSeconds.toString()
-      ..title = call.ID;
+      ..text = new DateTime.now().difference(call.arrived).inSeconds.toString();
 
     numbersAndStateDiv.children.addAll([callDesc, callWaitTimer]);
 
@@ -97,7 +96,7 @@ class UIMyCallQueue extends UIModel {
       ..classes.toggle('locked', call.locked)
       ..classes.toggle('speaking', call.state == ORModel.CallState.Speaking)
       ..title =
-          '${call.inbound ? _langMap[Key.callStateInbound] : _langMap[Key.callStateOutbound]}';
+          '${call.inbound ? _langMap[Key.callStateInbound] : _langMap[Key.callStateOutbound]} (${call.ID})';
   }
 
   /**
