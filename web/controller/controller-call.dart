@@ -220,7 +220,8 @@ class Call {
         call.assignedTo == ORModel.User.noID && !call.locked;
 
     Iterable<ORModel.Call> calls = await _service.callList();
-    ORModel.Call foundCall = calls.firstWhere(availableForPickup, orElse: () => null);
+    ORModel.Call foundCall =
+        calls.firstWhere(availableForPickup, orElse: () => null);
 
     _busy = false;
 
@@ -235,6 +236,36 @@ class Call {
    * Tries to pickup [call] and returns it if successful.
    */
   Future<ORModel.Call> pickupParked(ORModel.Call call) => pickup(call);
+
+  /**
+   * Pickup the first call that is not in the [lowPriorityIds] set.
+   *
+   * Always prefer calls for receptions that does not exist in [lowPriorityIds]. 
+   * Only pickup [lowPriorityIds] calls if NO other calls are available.
+   */
+  Future<ORModel.Call> pickupWithPriority(Set<int> lowPriorityIds) async {
+    final Iterable<ORModel.Call> calls = await _service.callList();
+
+    bool availableForPickup(ORModel.Call call) =>
+        call.assignedTo == ORModel.User.noID &&
+        !call.locked &&
+        !lowPriorityIds.contains(call.receptionID);
+
+    bool inLowPriorityList(ORModel.Call call) =>
+        lowPriorityIds.contains(call.receptionID);
+
+    if (calls.every(inLowPriorityList)) {
+      return await pickupNext();
+    } else {
+      final ORModel.Call foundCall =
+          calls.firstWhere(availableForPickup, orElse: () => null);
+      if (foundCall != null) {
+        return await pickup(foundCall);
+      } else {
+        return ORModel.Call.noCall;
+      }
+    }
+  }
 
   /**
    * Tries to transfer the [source] call to [destination].

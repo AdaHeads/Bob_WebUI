@@ -33,6 +33,12 @@ class MyCallQueue extends ViewWidget {
   final Model.UIReceptionSelector _receptionSelector;
   final Model.UIMyCallQueue _uiModel;
 
+  ///
+  /// TODO (TL): Get rid of this temporary fix, where rid 1485 is consider
+  /// "low priority" when answering calls.
+  ///
+  final Set<int> _lowPriorityIds = new Set.from([1485]);
+
   /**
    * Constructor.
    */
@@ -297,7 +303,10 @@ class MyCallQueue extends ViewWidget {
         _busyCallController();
         _receptionSelector.refreshReceptions();
 
-        _callController.pickupNext().then((ORModel.Call call) {
+        // _callController.pickupNext().then((ORModel.Call call) {
+        _callController
+            .pickupWithPriority(_lowPriorityIds)
+            .then((ORModel.Call call) {
           contextCallId = call.ID;
           _ui.removeTransferMarks();
           clearStaleCalls();
