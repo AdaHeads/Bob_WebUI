@@ -245,7 +245,7 @@ class Call {
   /**
    * Pickup the first call that is not in the [lowPriorityIds] set.
    *
-   * Always prefer calls for receptions that does not exist in [lowPriorityIds]. 
+   * Always prefer calls for receptions that does not exist in [lowPriorityIds].
    * Only pickup [lowPriorityIds] calls if NO other calls are available.
    */
   Future<ORModel.Call> pickupWithPriority(Set<int> lowPriorityIds) async {
@@ -260,7 +260,7 @@ class Call {
         lowPriorityIds.contains(call.receptionID);
 
     if (calls.every(inLowPriorityList)) {
-      return await pickupNext();
+      return await pickup(calls.first);
     } else {
       final ORModel.Call foundCall =
           calls.firstWhere(availableForPickup, orElse: () => null);
