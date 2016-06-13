@@ -249,6 +249,7 @@ class Call {
    * Only pickup [lowPriorityIds] calls if NO other calls are available.
    */
   Future<ORModel.Call> pickupWithPriority(Set<int> lowPriorityIds) async {
+    print(lowPriorityIds);
     final Iterable<ORModel.Call> calls = await _service.callList();
 
     bool availableForPickup(ORModel.Call call) =>
@@ -260,8 +261,17 @@ class Call {
         lowPriorityIds.contains(call.receptionID);
 
     if (calls.every(inLowPriorityList)) {
-      return await pickup(calls.first);
+      print('ALL CALLS ARE LOW PRIORITY!');
+      final ORModel.Call foundCall = calls.first;
+      if (foundCall != null) {
+        print(
+            'TRYING TO PICKUP ${foundCall.ID} FOR RECEPTION ${foundCall.receptionID}');
+        return await pickup(foundCall);
+      } else {
+        return ORModel.Call.noCall;
+      }
     } else {
+      print('ONE OR MORE CALLS ARE NOT LOW PRIORITY!');
       final ORModel.Call foundCall =
           calls.firstWhere(availableForPickup, orElse: () => null);
       if (foundCall != null) {
