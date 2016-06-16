@@ -303,7 +303,7 @@ Map<String, String> da = {
   Key.no: 'Nej',
   Key.now: 'nu',
 
-  Key.past: 'fortid',
+  Key.past: 'fortid - slet gerne',
   Key.paused: 'Pause',
   Key.phone: 'Telefon',
 
@@ -465,7 +465,7 @@ Map<String, String> en = {
   Key.no: 'No',
   Key.now: 'now',
 
-  Key.past: 'past',
+  Key.past: 'past - please delete',
   Key.paused: 'Paused',
   Key.phone: 'Phone',
 
