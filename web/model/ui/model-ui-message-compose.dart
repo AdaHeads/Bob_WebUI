@@ -169,8 +169,11 @@ class UIMessageCompose extends UIModel {
     } else {
       final List<SpanElement> spans = prerequisites
           .map((String s) => new SpanElement()
-            ..text = s.startsWith('!') ? s.substring(1) : s
-            ..classes.addAll(s.startsWith('!') ? ['is-prerequisite'] : []))
+            ..text = s.replaceAll('!', '').replaceAll('--', '')
+            ..classes.addAll(s.startsWith('!') ? ['is-prerequisite'] : [])
+            ..dataset['prerequisite'] = s.startsWith('!')
+                ? s.split('--').first.replaceAll('!', '').trim()
+                : '')
           .toList(growable: false);
 
       int counter = 0;
@@ -213,7 +216,7 @@ class UIMessageCompose extends UIModel {
             .toList(growable: false);
 
         for (SpanElement span in spans) {
-          sb.write('\n${span.text}: ');
+          sb.write('\n${span.dataset['prerequisite']}: ');
         }
 
         if (sb.isNotEmpty) {
