@@ -90,6 +90,14 @@ class MessageCompose extends ViewWidget {
         new ORModel.MessageContext.fromContact(_contactSelector.selectedContact,
             _receptionSelector.selectedReception);
 
+    if (messageContext.receptionID == ORModel.Reception.noID) {
+      /// We shouldn't really be here, since that means the system have returned
+      /// an empty reception from _receptionSelector.selectedReception
+      /// Lets at least try to get a rid, so we can proceed with sending the
+      /// message.
+      messageContext.receptionID = _contactSelector.selectedContact.receptionID;
+    }
+
     message.context = messageContext;
 
     return message;
