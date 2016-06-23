@@ -79,8 +79,8 @@ class MyCallQueue extends ViewWidget {
   /**
    * Tries to dial the [phoneNumber].
    *
-   * If this is called while [_appState.activeCall] is not [ORModel.Call.noCall], then mark both
-   * calls ready for transfer.
+   * If this is called while [_appState.activeCall] is not [ORModel.Call.noCall]
+   * then mark both calls ready for transfer.
    */
   Future _call(ORModel.PhoneNumber phoneNumber) async {
     ORModel.Call parkedCall;
@@ -118,8 +118,8 @@ class MyCallQueue extends ViewWidget {
   }
 
   /**
-   * Mark the call controller busy. This is just a simply protection against hammering the call
-   * controller with too many commands.
+   * Mark the call controller busy. This is just a simply protection against
+   * hammering the call controller with too many commands.
    */
   void _busyCallController() {
     _callControllerBusy = true;
@@ -157,8 +157,8 @@ class MyCallQueue extends ViewWidget {
   }
 
   /**
-   *  Mark the call controller ready. This operation is delayed 100ms, to prevent against agents
-   *  spamming commands at the call controller.
+   *  Mark the call controller ready. This operation is delayed 100ms, to
+   *  prevent against agents spamming commands at the call controller.
    */
   Future _readyCallController() {
     return new Future.delayed(
@@ -348,7 +348,8 @@ class MyCallQueue extends ViewWidget {
   }
 
   /**
-   * If no phonenumber is marked ringing, mark the currently selected phone number ringing.
+   * If no phonenumber is marked ringing, mark the currently selected phone
+   * number ringing.
    */
   void _setRinging() {
     _contactData.ring();

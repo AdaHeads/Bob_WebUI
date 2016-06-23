@@ -65,10 +65,48 @@ class UIMyCallQueue extends UIModel {
    */
   LIElement _buildCallElement(ORModel.Call call) {
     final DivElement numbersAndStateDiv = new DivElement()
+      ..classes.add('numbers-and-state')
       ..style.pointerEvents = 'none';
     final DivElement nameDiv = new DivElement()..style.pointerEvents = 'none';
 
-    setName(call, nameDiv);
+    /// Add a contact or reception name to [nameDiv].
+    /// If a name cannot be found in either [_contactMap] or [_receptionMap],
+    /// then we will fetch a name from the server asynchronously and cache it
+    /// locally.
+    final SpanElement rName = new SpanElement()..style.pointerEvents = 'none';
+    if (_receptionMap.containsKey(call.receptionID)) {
+      rName.text = _receptionMap[call.receptionID];
+    } else {
+      _receptionController
+          .get(call.receptionID)
+          .then((ORModel.Reception reception) {
+        rName.text = reception.name;
+        _receptionMap[call.receptionID] = reception.name;
+      });
+    }
+
+    if (!call.inbound) {
+      final SpanElement cName = new SpanElement()
+        ..style.pointerEvents = 'none'
+        ..style.display = 'block';
+      if (_contactMap.containsKey(call.contactID)) {
+        cName.text = _contactMap[call.contactID];
+      } else {
+        _contactController
+            .get(call.contactID)
+            .then((ORModel.BaseContact contact) {
+          cName.text = contact.fullName;
+          _contactMap[call.contactID] = contact.fullName;
+        });
+      }
+      nameDiv.children.add(cName);
+    }
+
+    if (nameDiv.children.isNotEmpty) {
+      rName..style.fontSize = '0.7em';
+    }
+
+    nameDiv.children.add(rName);
 
     final SpanElement callState = new SpanElement()
       ..style.pointerEvents = 'none'
@@ -145,7 +183,8 @@ class UIMyCallQueue extends UIModel {
   }
 
   /**
-   * Mark [call] ready for transfer. Does nothing if [call] is not found in the list.
+   * Mark [call] ready for transfer. Does nothing if [call] is not found in the
+   * list.
    */
   void markForTransfer(ORModel.Call call) {
     final LIElement li = _list.querySelector('[data-id="${call.ID}"]');
@@ -190,8 +229,8 @@ class UIMyCallQueue extends UIModel {
    * Remove [call] from the call list. Does nothing if [call] does not exist
    * in the call list.
    *
-   * If [call] was marked with the "transfer" attribute, then remove all transfer marks from the
-   * call list.
+   * If [call] was marked with the "transfer" attribute, then remove all
+   * transfer marks from the call list.
    */
   void removeCall(ORModel.Call call) {
     final LIElement li = _list.querySelector('[data-id="${call.ID}"]');
@@ -229,38 +268,6 @@ class UIMyCallQueue extends UIModel {
   }
 
   /**
-   * Adds a contact or reception name to [nameDiv].
-   *
-   * If a name cannot be found in either [_contactMap] or [_receptionMap], then we will fetch a name
-   * from the server asynchronously and cache it locally.
-   */
-  void setName(ORModel.Call call, DivElement nameDiv) {
-    if (call.inbound) {
-      if (_receptionMap.containsKey(call.receptionID)) {
-        nameDiv.text = _receptionMap[call.receptionID];
-      } else {
-        _receptionController
-            .get(call.receptionID)
-            .then((ORModel.Reception reception) {
-          nameDiv.text = reception.fullName;
-          _receptionMap[call.receptionID] = reception.fullName;
-        });
-      }
-    } else {
-      if (_contactMap.containsKey(call.contactID)) {
-        nameDiv.text = _contactMap[call.contactID];
-      } else {
-        _contactController
-            .get(call.contactID)
-            .then((ORModel.BaseContact contact) {
-          nameDiv.text = contact.fullName;
-          _contactMap[call.contactID] = contact.fullName;
-        });
-      }
-    }
-  }
-
-  /**
    * Find [call] in queue list and set the transfer attribute.
    */
   void setTransferMark(ORModel.Call call) {
@@ -280,8 +287,8 @@ class UIMyCallQueue extends UIModel {
   }
 
   /**
-   * Update [call] in the call list. If [call] does not exist in the call list, it is appended to
-   * the list.
+   * Update [call] in the call list. If [call] does not exist in the call list,
+   * it is appended to the list.
    */
   void updateCall(ORModel.Call call) {
     final LIElement li = _list.querySelector('[data-id="${call.ID}"]');
