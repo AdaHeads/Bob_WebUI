@@ -67,8 +67,8 @@ class UIMessageCompose extends UIModel {
   DivElement get _recipientsDiv => _root.querySelector('.recipients');
   OListElement get _recipientsList =>
       _root.querySelector('.recipients .generic-widget-list');
-  ButtonElement get _saveButton => _root.querySelector('.buttons .save');
-  ButtonElement get _sendButton => _root.querySelector('.buttons .send');
+  ButtonElement get saveButton => _root.querySelector('.buttons .save');
+  ButtonElement get sendButton => _root.querySelector('.buttons .send');
   SpanElement get _showRecipientsSpan =>
       _root.querySelector('.show-recipients');
   SpanElement get _showRecipientsText =>
@@ -233,12 +233,12 @@ class UIMessageCompose extends UIModel {
   /**
    * Return the click event stream for the save button.
    */
-  Stream<MouseEvent> get onSave => _saveButton.onClick;
+  Stream<MouseEvent> get onSave => saveButton.onClick;
 
   /**
    * Return the click event stream for the send button.
    */
-  Stream<MouseEvent> get onSend => _sendButton.onClick;
+  Stream<MouseEvent> get onSend => sendButton.onClick;
 
   /**
    * Return the Set of [ORModel.MessageRecipient]. May return the empty set.
@@ -361,8 +361,8 @@ class UIMessageCompose extends UIModel {
    */
   void _setupLocalKeys() {
     final Map<String, EventListener> bindings = {
-      'Ctrl+enter': (Event _) => _sendButton.click(),
-      'Ctrl+s': (Event _) => _saveButton.click()
+      'Ctrl+enter': (Event _) => sendButton.click(),
+      'Ctrl+s': (Event _) => saveButton.click()
     };
 
     _hotKeys.registerKeysPreventDefault(_keyboard, bindings);
@@ -377,10 +377,10 @@ class UIMessageCompose extends UIModel {
     final bool toggle = !(_callerNameInput.value.trim().isNotEmpty &&
         _messageTextarea.value.trim().isNotEmpty);
 
-    _saveButton.disabled = toggle || _recipientsList.children.isEmpty;
-    _sendButton.disabled = toggle || _recipientsList.children.isEmpty;
+    saveButton.disabled = toggle || _recipientsList.children.isEmpty;
+    sendButton.disabled = toggle || _recipientsList.children.isEmpty;
 
-    _myLastTabElement = toggle ? _urgentInput : _sendButton;
+    _myLastTabElement = toggle ? _urgentInput : sendButton;
   }
 
   /**
