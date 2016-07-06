@@ -20,6 +20,10 @@ class UIReceptionCalendar extends UIModel {
   final Map<String, String> _langMap;
   final DivElement _myRoot;
   final ORUtil.WeekDays _weekDays;
+  final NodeValidatorBuilder _validator = new NodeValidatorBuilder()
+    ..allowTextElements()
+    ..allowHtml5()
+    ..allowInlineStyles();
 
   /**
    * Constructor.
@@ -73,7 +77,10 @@ class UIReceptionCalendar extends UIModel {
     }
 
     items.forEach((ORModel.CalendarEntry item) {
-      final DivElement content = new DivElement()..text = item.content;
+      final DivElement content = new DivElement()
+        ..classes.add('markdown')
+        ..setInnerHtml(Markdown.markdownToHtml(item.content),
+            validator: _validator);
 
       String start = ORUtil.humanReadableTimestamp(item.start, _weekDays);
       String stop = ORUtil.humanReadableTimestamp(item.stop, _weekDays);
