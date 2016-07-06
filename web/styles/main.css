@@ -172,12 +172,6 @@ input:focus  ~label {
   100% {color: inherit;}
 }
 
-@-webkit-keyframes pulse {
-  0% {background-color: inherit;}
-  50% {background-color: #f00;}
-  100% {background-color: inherit;}
-}
-
 .spinning-focus-box {
   position: absolute;
   z-index: -1;
