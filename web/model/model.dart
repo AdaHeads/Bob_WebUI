@@ -27,6 +27,7 @@ import 'package:openreception_framework/bus.dart';
 import 'package:openreception_framework/event.dart' as OREvent;
 import 'package:openreception_framework/model.dart' as ORModel;
 import 'package:openreception_framework/util.dart' as ORUtil;
+import 'package:openreception_framework/util_html.dart' as ORUtilHtml;
 
 part 'model-app-state.dart';
 part 'model-client-connection-state.dart';

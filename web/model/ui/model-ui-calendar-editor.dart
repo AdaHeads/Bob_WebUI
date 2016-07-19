@@ -148,7 +148,7 @@ class UICalendarEditor extends UIModel {
     });
 
     _textArea.onInput.listen((_) {
-      ORUtil.specialCharReplace(_textArea);
+      ORUtilHtml.specialCharReplace(_textArea);
       _toggleButtons();
     });
     _startHourInput.onInput.listen((_) {
