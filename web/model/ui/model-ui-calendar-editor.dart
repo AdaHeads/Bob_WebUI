@@ -24,8 +24,11 @@ class UICalendarEditor extends UIModel {
   HtmlElement _myLastTabElement;
   final DivElement _myRoot;
   bool _newEntry = true;
+  bool _stopDayEdit = false;
   bool _stopHourEdit = false;
   bool _stopMinuteEdit = false;
+  bool _stopMonthEdit = false;
+  bool _stopYearEdit = false;
   final ORUtil.WeekDays _weekDays;
 
   /**
@@ -151,6 +154,7 @@ class UICalendarEditor extends UIModel {
       ORUtilHtml.specialCharReplace(_textArea);
       _toggleButtons();
     });
+
     _startHourInput.onInput.listen((_) {
       if (!_stopHourEdit && _newEntry) {
         int startHour = _startHourInput.valueAsNumber;
@@ -162,26 +166,59 @@ class UICalendarEditor extends UIModel {
       }
       _update(_startHourInput);
     });
+
     _startMinuteInput.onInput.listen((_) {
       if (!_stopMinuteEdit && _newEntry) {
         _stopMinuteInput.value = _startMinuteInput.value;
       }
       _update(_startMinuteInput);
     });
-    _startDayInput.onInput.listen((_) => _update(_startDayInput));
-    _startMonthInput.onInput.listen((_) => _update(_startMonthInput));
-    _startYearInput.onInput.listen((_) => _update(_startYearInput));
+
+    _startDayInput.onInput.listen((_) {
+      if (!_stopDayEdit && _newEntry) {
+        _stopDayInput.value = _startDayInput.value;
+      }
+      _update(_startDayInput);
+    });
+
+    _startMonthInput.onInput.listen((_) {
+      if (!_stopMonthEdit && _newEntry) {
+        _stopMonthInput.value = _startMonthInput.value;
+      }
+      _update(_startMonthInput);
+    });
+
+    _startYearInput.onInput.listen((_) {
+      if (!_stopYearEdit && _newEntry) {
+        _stopYearInput.value = _startYearInput.value;
+      }
+      _update(_startYearInput);
+    });
+
     _stopHourInput.onInput.listen((_) {
       _stopHourEdit = true;
       _update(_stopHourInput);
     });
+
     _stopMinuteInput.onInput.listen((_) {
       _stopMinuteEdit = true;
       _update(_stopMinuteInput);
     });
-    _stopDayInput.onInput.listen((_) => _update(_stopDayInput));
-    _stopMonthInput.onInput.listen((_) => _update(_stopMonthInput));
-    _stopYearInput.onInput.listen((_) => _update(_stopYearInput));
+
+    _stopDayInput.onInput.listen((_) {
+      _stopDayEdit = true;
+      _update(_stopDayInput);
+    });
+
+    _stopMonthInput.onInput.listen((_) {
+      _stopMonthEdit = true;
+      _update(_stopMonthInput);
+    });
+
+    _stopYearInput.onInput.listen((_) {
+      _stopYearEdit = true;
+      _update(_stopYearInput);
+    });
   }
 
   /**

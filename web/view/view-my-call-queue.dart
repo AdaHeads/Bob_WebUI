@@ -25,6 +25,7 @@ class MyCallQueue extends ViewWidget {
   final Model.UIContactData _contactData;
   final Model.UIContactSelector _contactSelector;
   String _contextCallId = '';
+  bool _homeIsFocused = true;
   final Map<String, String> _langMap;
   final Logger _log = new Logger('$libraryName.MyCallQueue');
   final Controller.Destination _myDestination;
@@ -232,7 +233,10 @@ class MyCallQueue extends ViewWidget {
    * Observers.
    */
   void _observers() {
-    _navigate.onGo.listen(_setWidgetState);
+    _navigate.onGo.listen((Controller.Destination destination) {
+      _homeIsFocused = destination.context == Controller.Context.home;
+      _setWidgetState;
+    });
 
     _ui.onClick.listen((MouseEvent _) => _activateMe());
 
@@ -299,7 +303,7 @@ class MyCallQueue extends ViewWidget {
 
     /// Pickup new call
     _hotKeys.onNumPlus.listen((_) {
-      if (!_callControllerBusy) {
+      if (_homeIsFocused && !_callControllerBusy) {
         _busyCallController();
         _receptionSelector.refreshReceptions();
 

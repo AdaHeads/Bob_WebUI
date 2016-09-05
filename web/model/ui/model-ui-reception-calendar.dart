@@ -23,7 +23,8 @@ class UIReceptionCalendar extends UIModel {
   final NodeValidatorBuilder _validator = new NodeValidatorBuilder()
     ..allowTextElements()
     ..allowHtml5()
-    ..allowInlineStyles();
+    ..allowInlineStyles()
+    ..allowNavigation(new AllUriPolicy());
 
   /**
    * Constructor.
@@ -77,10 +78,20 @@ class UIReceptionCalendar extends UIModel {
     }
 
     items.forEach((ORModel.CalendarEntry item) {
+      final LIElement li = new LIElement();
       final DivElement content = new DivElement()
         ..classes.add('markdown')
         ..setInnerHtml(Markdown.markdownToHtml(item.content),
             validator: _validator);
+
+      content.querySelectorAll('a').forEach((elem) {
+        elem.onClick.listen((MouseEvent event) {
+          event.preventDefault();
+          final AnchorElement a = event.target;
+          window.open(a.href, a.text);
+          _markSelected(li);
+        });
+      });
 
       String start = ORUtil.humanReadableTimestamp(item.start, _weekDays);
       String stop = ORUtil.humanReadableTimestamp(item.stop, _weekDays);
@@ -102,7 +113,7 @@ class UIReceptionCalendar extends UIModel {
             ..text = '${start} - ${stop}'
         ]);
 
-      list.add(new LIElement()
+      list.add(li
         ..children.addAll([content, labelAndTimestamp])
         ..title = 'Id: ${item.ID.toString()}'
         ..dataset['object'] = JSON.encode(item)

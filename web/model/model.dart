@@ -72,6 +72,13 @@ typedef void SelectCallback(LIElement li);
 final Controller.HotKeys _hotKeys = new Controller.HotKeys();
 
 /**
+ * [UriPolicy] used by Markdown to allow linking to outside domains.
+ */
+class AllUriPolicy implements UriPolicy {
+  bool allowsUri(_) => true;
+}
+
+/**
  * Base class for all UI model classes.
  */
 abstract class UIModel {
