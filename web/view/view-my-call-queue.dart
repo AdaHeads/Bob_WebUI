@@ -35,10 +35,12 @@ class MyCallQueue extends ViewWidget {
   final Model.UIMyCallQueue _uiModel;
 
   ///
-  /// TODO (TL): Get rid of this temporary fix, where rid 1485 is consider
-  /// "low priority" when answering calls.
+  /// TODO (TL): Temporary fix. All rids added to the _lowPriorityIds set are
+  /// considered "low priority" when answering calls. What this means is that
+  /// They are placed at the back as long as there are other calls in the
+  /// queue.
   ///
-  final Set<int> _lowPriorityIds = new Set.from([1485]);
+  final Set<int> _lowPriorityIds = new Set.from([]);
 
   /**
    * Constructor.
