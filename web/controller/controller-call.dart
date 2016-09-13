@@ -91,7 +91,7 @@ class Call {
     _command.fire(CallCommand.dial);
 
     return await _service
-        .originate(phoneNumber.endpoint, context)
+        .originate(phoneNumber.sanitizedEndpoint, context)
         .then((ORModel.Call call) {
       _command.fire(CallCommand.dialSuccess);
 
