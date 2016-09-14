@@ -237,6 +237,7 @@ class ORCReady {
     new MyCallQueue(
         new Model.UIMyCallQueue(querySelector('#my-call-queue'), _langMap,
             _contactController, _receptionController),
+        _uiMessageCompose,
         _appState,
         new Controller.Destination(
             Controller.Context.home, Controller.Widget.myCallQueue),

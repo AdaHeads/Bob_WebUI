@@ -33,6 +33,7 @@ class MyCallQueue extends ViewWidget {
   final Controller.Popup _popup;
   final Model.UIReceptionSelector _receptionSelector;
   final Model.UIMyCallQueue _uiModel;
+  final Model.UIMessageCompose _uiModelMessageCompose;
 
   ///
   /// TODO (TL): Temporary fix. All rids added to the _lowPriorityIds set are
@@ -47,6 +48,7 @@ class MyCallQueue extends ViewWidget {
    */
   MyCallQueue(
       Model.UIMyCallQueue this._uiModel,
+      Model.UIMessageCompose this._uiModelMessageCompose,
       Model.AppClientState this._appState,
       Controller.Destination this._myDestination,
       Controller.Notification this._notification,
@@ -305,7 +307,9 @@ class MyCallQueue extends ViewWidget {
 
     /// Pickup new call
     _hotKeys.onNumPlus.listen((_) {
-      if (_homeIsFocused && !_callControllerBusy) {
+      if (_homeIsFocused &&
+          _uiModelMessageCompose.noMessage &&
+          !_callControllerBusy) {
         _busyCallController();
         _receptionSelector.refreshReceptions();
 
