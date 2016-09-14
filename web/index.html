@@ -989,11 +989,10 @@
 
                   #reception-calendar .generic-widget-list li .label-and-timestamp .label-past {
                     color: red;
-                    -animation: pulse-label-past 0.7s infinite alternate;
-                    -webkit-animation: pulse-label-past 0.7s infinite alternate;
+                    animation: pulse-label-past 0.7s infinite alternate;
                   }
 
-                  @-webkit-keyframes pulse-label-past {
+                  @keyframes pulse-label-past {
                     to {
                       opacity: 0.1;
                     }
@@ -1007,7 +1006,7 @@
                   #reception-calendar .generic-widget-list li div,
                   #reception-calendar .generic-widget-list li span {
                     pointer-events: none;
-                  }
+                  }                  
 
                   #reception-calendar .generic-widget-list li div.markdown a {
                     color: blue;
@@ -1529,11 +1528,10 @@
 
                     #contact-calendar .generic-widget-list li .label-and-timestamp .label-past {
                       color: red;
-                      -animation: pulse-label-past 0.7s infinite alternate;
-                      -webkit-animation: pulse-label-past 0.7s infinite alternate;
+                      animation: pulse-label-past 0.7s infinite alternate;
                     }
 
-                    @-webkit-keyframes pulse-label-past {
+                    @keyframes pulse-label-past {
                       to {
                         opacity: 0.1;
                       }
@@ -1728,28 +1726,15 @@
                     color: initial;
                   }
 
-                  /*
-                    TODO (TL): Remove the -webkit- specific selectors
-                    when Chrome gets rid of them.
-                  */
                   #contact-data .popup .ringing,
                   #contact-data .cell .ringing {
                     animation-name: flash;
                     animation-duration: 2s;
                     animation-fill-mode: both;
                     animation-iteration-count: infinite;
-                    -webkit-animation-name: flash;
-                    -webkit-animation-duration: 2s;
-                    -webkit-animation-fill-mode: both;
-                    -webkit-animation-iteration-count: infinite;
                   }
 
                   @keyframes flash {
-                    0%, 50%, 100% {opacity: 1}
-                    25%, 75% {opacity: 0.1}
-                  }
-
-                  @-webkit-keyframes flash {
                     0%, 50%, 100% {opacity: 1}
                     25%, 75% {opacity: 0.1}
                   }
