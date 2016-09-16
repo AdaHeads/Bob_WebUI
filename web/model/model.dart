@@ -354,7 +354,15 @@ abstract class UIModel {
   }
 }
 
-enum filterState { empty, firstInitial, initials, otherInitials, tag }
+enum filterState {
+  department,
+  empty,
+  firstInitial,
+  initials,
+  otherInitials,
+  tag,
+  title
+}
 
 class ContactWithFilterContext {
   final ORModel.Contact contact;
