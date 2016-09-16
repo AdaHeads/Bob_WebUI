@@ -43,7 +43,7 @@ class ReceptionSelector extends ViewWidget {
       Map<String, String> this._langMap) {
     _ui.setHint('alt+v');
 
-    _ui.receptions = _receptions;
+    _ui.receptions = _receptions.where((ORModel.Reception r) => r.enabled);
 
     _observers();
   }
@@ -114,9 +114,11 @@ class ReceptionSelector extends ViewWidget {
         _receptionController
             .list()
             .then((Iterable<ORModel.Reception> receptions) {
-          _ui.receptionsCache = receptions.toList()
-            ..sort(
-                (x, y) => x.name.toLowerCase().compareTo(y.name.toLowerCase()));
+          _ui.receptionsCache = receptions
+              .where((ORModel.Reception r) => r.enabled)
+              .toList()
+                ..sort((x, y) =>
+                    x.name.toLowerCase().compareTo(y.name.toLowerCase()));
         });
       }
     });
