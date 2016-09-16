@@ -270,7 +270,7 @@ Map<String, String> da = {
   Key.extension: 'Lokalnummer',
 
   Key.filter: 'filter...',
-  Key.filterContactSelector: 'søg på navn, stikord, a:afdeling eller t:titel',
+  Key.filterContactSelector: 'søg på navn, stikord, a:afd. eller t:titel',
   Key.future: 'fremtid',
 
   Key.globalCallQueueHeader: 'Kø',
@@ -435,7 +435,7 @@ Map<String, String> en = {
   Key.extension: 'Extension',
 
   Key.filter: 'filter...',
-  Key.filterContactSelector: 'filter on name, tag, a:department or t:title',
+  Key.filterContactSelector: 'filter on name, tag, a:dep. or t:title',
   Key.future: 'future',
 
   Key.globalCallQueueHeader: 'Queue',
