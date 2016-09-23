@@ -207,8 +207,7 @@ class UIContactSelector extends UIModel {
 
           final Set<String> exactHits =
               tags.where((String tag) => inputValue == tag).toSet();
-          final Set<String> partialHits = li.dataset['tags']
-              .split('-|-')
+          final Set<String> partialHits = tags
               .where((String tag) =>
                   parts.every((String part) => tag.contains(part)))
               .toSet();
@@ -235,7 +234,9 @@ class UIContactSelector extends UIModel {
     }
 
     final LIElement selected = _list.querySelector('.selected');
-    selected.scrollIntoView();
+    if (selected != null) {
+      selected.scrollIntoView();
+    }
   }
 
   /**
