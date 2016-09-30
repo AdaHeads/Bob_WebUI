@@ -53,7 +53,7 @@ abstract class Key {
   static const String closed = 'closed';
   static const String company = 'company';
 
-  static const String contactCalendarHeader = 'contact-calendar-header';
+  static const String calendarHeader = 'calendar-header';
   static const String contactDataAddInfo = 'contact-data-add-info';
   static const String contactDataBackup = 'contact-data-backup';
   static const String contactDataCommands = 'contact-data-commands';
@@ -226,7 +226,7 @@ Map<String, String> da = {
   Key.closed: 'Lukket',
   Key.company: 'Virksomhed',
 
-  Key.contactCalendarHeader: 'Kontaktkalender',
+  Key.calendarHeader: 'Kalender',
   Key.contactDataAddInfo: 'Info',
   Key.contactDataBackup: 'Backup',
   Key.contactDataCommands: 'Kommandoer',
@@ -391,7 +391,7 @@ Map<String, String> en = {
   Key.closed: 'Closed',
   Key.company: 'Company',
 
-  Key.contactCalendarHeader: 'Contact calendar',
+  Key.calendarHeader: 'Calendar',
   Key.contactDataAddInfo: 'Miscellaneous',
   Key.contactDataBackup: 'Backup',
   Key.contactDataCommands: 'Commands',
@@ -472,7 +472,7 @@ Map<String, String> en = {
   Key.no: 'No',
   Key.now: 'now',
 
-  Key.past: 'past - please delete',
+  Key.past: 'past - do delete',
   Key.paused: 'Paused',
   Key.phone: 'Phone',
 

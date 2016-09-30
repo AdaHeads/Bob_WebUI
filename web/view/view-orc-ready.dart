@@ -22,7 +22,6 @@ class ORCReady {
   final Controller.Calendar _calendarController;
   final Controller.Call _callController;
   final ORModel.ClientConfiguration _clientConfig;
-  ContactCalendar _contactCalendar;
   final Controller.Contact _contactController;
   ContactSelector _contactSelector;
   final Controller.DistributionList _distributionListController;
@@ -127,8 +126,8 @@ class ORCReady {
         _langMap[Key.dayFriday],
         _langMap[Key.daySaturday],
         _langMap[Key.daySunday]);
-    Model.UIContactCalendar _uiContactCalendar = new Model.UIContactCalendar(
-        querySelector('#contact-calendar'), _weekDays, _langMap);
+    Model.UICalendar _uiCalendar =
+        new Model.UICalendar(querySelector('#calendar'), _weekDays, _langMap);
     Model.UIContactData _uiContactData =
         new Model.UIContactData(querySelector('#contact-data'));
     Model.UIContactSelector _uiContactSelector = new Model.UIContactSelector(
@@ -168,10 +167,10 @@ class ORCReady {
           userStatus);
     });
 
-    _contactCalendar = new ContactCalendar(
-        _uiContactCalendar,
+    new Calendar(
+        _uiCalendar,
         new Controller.Destination(
-            Controller.Context.home, Controller.Widget.contactCalendar),
+            Controller.Context.home, Controller.Widget.calendar),
         _uiContactSelector,
         _uiReceptionSelector,
         _contactController,
@@ -192,7 +191,7 @@ class ORCReady {
             querySelector('#calendar-editor'), _weekDays, _langMap),
         new Controller.Destination(
             Controller.Context.calendarEdit, Controller.Widget.calendarEditor),
-        _uiContactCalendar,
+        _uiCalendar,
         _uiContactSelector,
         _uiReceptionCalendar,
         _uiReceptionSelector,

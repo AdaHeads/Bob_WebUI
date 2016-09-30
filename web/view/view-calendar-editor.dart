@@ -14,11 +14,10 @@
 part of view;
 
 /**
- * The calendar editor widget. Note that this handles editing of calendar entries
- * for both receptions and contacts.
+ * The calendar editor widget.
  */
 class CalendarEditor extends ViewWidget {
-  final Model.UIContactCalendar _contactCalendar;
+  final Model.UICalendar _calendar;
   final Controller.Calendar _calendarController;
   final Model.UIContactSelector _contactSelector;
   final Map<String, String> _langMap;
@@ -35,7 +34,7 @@ class CalendarEditor extends ViewWidget {
   CalendarEditor(
       Model.UICalendarEditor this._uiModel,
       Controller.Destination this._myDestination,
-      Model.UIContactCalendar this._contactCalendar,
+      Model.UICalendar this._calendar,
       Model.UIContactSelector this._contactSelector,
       Model.UIReceptionCalendar this._receptionCalendar,
       Model.UIReceptionSelector this._receptionSelector,
@@ -64,7 +63,7 @@ class CalendarEditor extends ViewWidget {
       if (_receptionCalendar.isFocused) {
         _setup(Controller.Widget.receptionCalendar, cmd);
       } else {
-        _setup(Controller.Widget.contactCalendar, cmd);
+        _setup(Controller.Widget.calendar, cmd);
       }
     }
   }
@@ -159,12 +158,12 @@ class CalendarEditor extends ViewWidget {
     ORModel.CalendarEntry entry;
 
     switch (from) {
-      case Controller.Widget.contactCalendar:
+      case Controller.Widget.calendar:
         if (cmd == Controller.Cmd.edit) {
-          entry = _contactCalendar.selectedCalendarEntry;
+          entry = _calendar.selectedCalendarEntry;
 
           if (entry.ID == ORModel.CalendarEntry.noID) {
-            entry = _contactCalendar.firstCalendarEntry;
+            entry = _calendar.firstCalendarEntry;
           }
 
           if (entry.ID != ORModel.CalendarEntry.noID) {

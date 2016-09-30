@@ -33,8 +33,8 @@ part 'model-app-state.dart';
 part 'model-client-connection-state.dart';
 
 part 'ui/model-ui-agent-info.dart';
+part 'ui/model-ui-calendar.dart';
 part 'ui/model-ui-calendar-editor.dart';
-part 'ui/model-ui-contact-calendar.dart';
 part 'ui/model-ui-contact-data.dart';
 part 'ui/model-ui-contact-selector.dart';
 part 'ui/model-ui-contexts.dart';
@@ -83,6 +83,7 @@ class AllUriPolicy implements UriPolicy {
  */
 abstract class UIModel {
   final Okeyee.Keyboard _keyboard = new Okeyee.Keyboard();
+  DateTime _lastKeyUpDown = new DateTime.now();
 
   ElementList<Element> get _ctrlAElements =>
       _root.querySelectorAll('[ctrl-a-enabled]');
@@ -202,9 +203,16 @@ abstract class UIModel {
    * as the target list. If [_listTarget] is not empty, then scan forward
    * for "down" arrow and backwards for "up" arrow. Call [_markSelected] on the
    * first element found that is visible and not selected.
+   *
+   * Allows a maximum of 10 keypresses per second.
    */
   void _handleUpDown(Event event) {
-    if (_listTarget.children.isNotEmpty) {
+    final DateTime now = new DateTime.now();
+
+    if (_listTarget.children.isNotEmpty &&
+        now.difference(_lastKeyUpDown).inMilliseconds > 100) {
+      _lastKeyUpDown = now;
+
       final LIElement selected =
           _listTarget.querySelector('.selected:not(.hide)');
 

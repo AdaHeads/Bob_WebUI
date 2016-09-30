@@ -14,9 +14,9 @@
 part of model;
 
 /**
- * Provides methods for manipulating the contact calendar UI widget.
+ * Provides methods for manipulating the calendar UI widget.
  */
-class UIContactCalendar extends UIModel {
+class UICalendar extends UIModel {
   final Map<String, String> _langMap;
   final DivElement _myRoot;
   final ORUtil.WeekDays _weekDays;
@@ -29,7 +29,7 @@ class UIContactCalendar extends UIModel {
   /**
    * Constructor.
    */
-  UIContactCalendar(DivElement this._myRoot, ORUtil.WeekDays this._weekDays,
+  UICalendar(DivElement this._myRoot, ORUtil.WeekDays this._weekDays,
       Map<String, String> this._langMap) {
     _setupLocalKeys();
     _observers();
@@ -78,10 +78,22 @@ class UIContactCalendar extends UIModel {
     }
 
     items.forEach((ORModel.CalendarEntry item) {
+      String label(ORModel.CalendarEntry entry) {
+        final StringBuffer sb = new StringBuffer();
+        String l = entry.ID == ORModel.CalendarEntry.noID ? 'L' : '';
+        String r = entry.owner is ORModel.OwningReception ? 'R' : '';
+
+        if (l.isNotEmpty || r.isNotEmpty) {
+          sb.write('**[$r$l]** ');
+        }
+
+        return sb.toString();
+      }
+
       final LIElement li = new LIElement();
       final DivElement content = new DivElement()
         ..classes.add('markdown')
-        ..setInnerHtml(Markdown.markdownToHtml(item.content),
+        ..setInnerHtml(Markdown.markdownToHtml('${label(item)}${item.content}'),
             validator: _validator);
 
       content.querySelectorAll('a').forEach((elem) {
@@ -132,8 +144,7 @@ class UIContactCalendar extends UIModel {
   }
 
   /**
-   * Return the first [ContactCalendarEntry]. Return empty entry if list is
-   * empty.
+   * Return the first [CalendarEntry]. Return empty entry if list is empty.
    */
   ORModel.CalendarEntry get firstCalendarEntry {
     try {
@@ -145,8 +156,8 @@ class UIContactCalendar extends UIModel {
   }
 
   /**
-   * Return currently selected [ContactCalendarEntry]. Return empty entry if
-   * nothing is selected.
+   * Return currently selected [CalendarEntry]. Return empty entry if nothing is
+   * selected.
    */
   ORModel.CalendarEntry get selectedCalendarEntry {
     final LIElement selected = _list.querySelector('.selected');

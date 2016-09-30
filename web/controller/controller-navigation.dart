@@ -17,8 +17,8 @@ enum Context { home, homePlus, calendarEdit, messages }
 
 enum Widget {
   agentInfo,
+  calendar,
   calendarEditor,
-  contactCalendar,
   contactData,
   contactSelector,
   globalCallQueue,
@@ -52,8 +52,8 @@ final Map<Context, Widget> _defaultWidgets = {
 final Map<String, Destination> _destinations = {
   '${Context.calendarEdit}-${Widget.calendarEditor}':
       new Destination(Context.calendarEdit, Widget.calendarEditor),
-  '${Context.home}-${Widget.contactCalendar}':
-      new Destination(Context.home, Widget.contactCalendar),
+  '${Context.home}-${Widget.calendar}':
+      new Destination(Context.home, Widget.calendar),
   '${Context.home}-${Widget.contactData}':
       new Destination(Context.home, Widget.contactData),
   '${Context.home}-${Widget.contactSelector}':

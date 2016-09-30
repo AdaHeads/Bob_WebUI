@@ -19,6 +19,7 @@ part of model;
 class UIReceptionSelector extends UIModel {
   final Bus<ORModel.Reception> _bus = new Bus<ORModel.Reception>();
   final Map<String, String> _langMap;
+  DateTime _lastClick = new DateTime.now();
   final DivElement _myRoot;
   final Controller.Popup _popup;
   List<LIElement> _receptionsCache = new List<LIElement>();
@@ -172,7 +173,7 @@ class UIReceptionSelector extends UIModel {
 
   /**
    * Fire a [Reception] on [_bus]. The [Reception] is constructed from JSON
-   * fonud in the data-object attribute of [li].
+   * found in the data-object attribute of [li].
    */
   void _receptionSelectCallback(LIElement li) {
     _bus.fire(new ORModel.Reception.fromMap(JSON.decode(li.dataset['object'])));
@@ -213,9 +214,16 @@ class UIReceptionSelector extends UIModel {
   /**
    * Mark a [LIElement] in the reception list selected, if one such is the
    * target of the [event].
+   *
+   * Only allow one click per 100 milliseconds.
    */
   void _selectFromClick(MouseEvent event) {
-    if (event.target != _filter) {
+    final DateTime now = new DateTime.now();
+
+    if (event.target != _filter &&
+        now.difference(_lastClick).inMilliseconds > 100) {
+      _lastClick = now;
+
       /// NOTE (TL): This keeps focus on the _filter field, despite clicks on
       /// other elements.
       event.preventDefault();

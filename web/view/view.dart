@@ -26,8 +26,8 @@ import 'package:openreception_framework/model.dart' as ORModel;
 import 'package:openreception_framework/util.dart' as ORUtil;
 
 part 'view-agent-info.dart';
+part 'view-calendar.dart';
 part 'view-calendar-editor.dart';
-part 'view-contact-calendar.dart';
 part 'view-contact-data.dart';
 part 'view-contact-selector.dart';
 part 'view-contexts.dart';
