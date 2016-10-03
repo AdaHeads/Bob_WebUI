@@ -42,7 +42,6 @@ part 'view-orc-ready.dart';
 part 'view-reception-addresses.dart';
 part 'view-reception-alt-names.dart';
 part 'view-reception-bank-info.dart';
-part 'view-reception-calendar.dart';
 part 'view-reception-commands.dart';
 part 'view-reception-email.dart';
 part 'view-reception-mini-wiki.dart';

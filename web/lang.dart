@@ -150,7 +150,6 @@ abstract class Key {
   static const String receptionAddressesHeader = 'reception-addresses-header';
   static const String receptionAltNamesHeader = 'reception-alt-names-header';
   static const String receptionBankInfoHeader = 'reception-bank-info-header';
-  static const String receptionCalendarHeader = 'reception-calendar-header';
   static const String receptionCommandsHeader = 'reception-commands-header';
   static const String receptionChanged = 'reception-changed';
   static const String receptionEmailHeader = 'reception-email-header';
@@ -317,7 +316,6 @@ Map<String, String> da = {
   Key.receptionAddressesHeader: 'Adresser',
   Key.receptionAltNamesHeader: 'Alternative navne',
   Key.receptionBankInfoHeader: 'Bank',
-  Key.receptionCalendarHeader: 'Receptionskalender',
   Key.receptionCommandsHeader: 'Kommandoer',
   Key.receptionChanged: 'Henter ny receptionsliste ved næste kaldbesvarelse',
   Key.receptionEmailHeader: 'Emailadresser',
@@ -482,7 +480,6 @@ Map<String, String> en = {
   Key.receptionAddressesHeader: 'Addresses',
   Key.receptionAltNamesHeader: 'Alternative names',
   Key.receptionBankInfoHeader: 'Bank',
-  Key.receptionCalendarHeader: 'Reception Calendar',
   Key.receptionCommandsHeader: 'Commands',
   Key.receptionChanged: 'Reception list will be refreshed on next call answer',
   Key.receptionEmailHeader: 'Email addresses',

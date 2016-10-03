@@ -31,7 +31,6 @@ class ORCReady {
   Controller.Message _messageController;
   Controller.Notification _notification;
   Controller.Popup _popup;
-  ReceptionCalendar _receptionCalendar;
   final Controller.Reception _receptionController;
   ReceptionSelector _receptionSelector;
   static ORCReady _singleton;
@@ -136,9 +135,6 @@ class ORCReady {
         querySelector('#message-archive'), _weekDays, _langMap);
     Model.UIMessageCompose _uiMessageCompose =
         new Model.UIMessageCompose(querySelector('#message-compose'));
-    Model.UIReceptionCalendar _uiReceptionCalendar =
-        new Model.UIReceptionCalendar(
-            querySelector('#reception-calendar'), _weekDays, _langMap);
     Model.UIReceptionSelector _uiReceptionSelector =
         new Model.UIReceptionSelector(
             querySelector('#reception-selector'), _popup, _langMap);
@@ -193,7 +189,6 @@ class ORCReady {
             Controller.Context.calendarEdit, Controller.Widget.calendarEditor),
         _uiCalendar,
         _uiContactSelector,
-        _uiReceptionCalendar,
         _uiReceptionSelector,
         _calendarController,
         _popup,
@@ -265,14 +260,6 @@ class ORCReady {
         new Controller.Destination(
             Controller.Context.homePlus, Controller.Widget.receptionBankInfo),
         _uiReceptionSelector);
-
-    _receptionCalendar = new ReceptionCalendar(
-        _uiReceptionCalendar,
-        new Controller.Destination(
-            Controller.Context.home, Controller.Widget.receptionCalendar),
-        _uiReceptionSelector,
-        _calendarController,
-        _notification);
 
     new ReceptionCommands(
         new Model.UIReceptionCommands(querySelector('#reception-commands')),

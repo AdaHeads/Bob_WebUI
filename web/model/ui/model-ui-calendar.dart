@@ -51,7 +51,7 @@ class UICalendar extends UIModel {
   /**
    * Add [items] to the [CalendarEntry] list.
    */
-  set calendarEntries(Iterable<ORModel.CalendarEntry> items) {
+  set calendarEntries(Iterable<CalendarEntry> items) {
     final List<LIElement> list = new List<LIElement>();
     final DateTime now = new DateTime.now();
 
@@ -60,12 +60,24 @@ class UICalendar extends UIModel {
         stamp.month == now.month &&
         stamp.year == now.year;
 
-    SpanElement labelElement(ORModel.CalendarEntry item) {
+    String whenWhatLabel(ORModel.CalendarEntry entry) {
+      final StringBuffer sb = new StringBuffer();
+      String l = entry.ID == ORModel.CalendarEntry.noID ? 'L' : '';
+      String r = entry.owner is ORModel.OwningReception ? 'R' : '';
+
+      if (l.isNotEmpty || r.isNotEmpty) {
+        sb.write('**[$r$l]** ');
+      }
+
+      return sb.toString();
+    }
+
+    SpanElement labelElement(ORModel.CalendarEntry entry) {
       final SpanElement label = new SpanElement();
 
-      if (!item.active) {
+      if (!entry.active) {
         final DateTime now = new DateTime.now();
-        if (item.start.isBefore(now)) {
+        if (entry.start.isBefore(now)) {
           label.classes.add('label-past');
           label.text = _langMap[Key.past];
         } else {
@@ -77,23 +89,13 @@ class UICalendar extends UIModel {
       return label;
     }
 
-    items.forEach((ORModel.CalendarEntry item) {
-      String label(ORModel.CalendarEntry entry) {
-        final StringBuffer sb = new StringBuffer();
-        String l = entry.ID == ORModel.CalendarEntry.noID ? 'L' : '';
-        String r = entry.owner is ORModel.OwningReception ? 'R' : '';
-
-        if (l.isNotEmpty || r.isNotEmpty) {
-          sb.write('**[$r$l]** ');
-        }
-
-        return sb.toString();
-      }
-
+    items.forEach((CalendarEntry ce) {
       final LIElement li = new LIElement();
       final DivElement content = new DivElement()
         ..classes.add('markdown')
-        ..setInnerHtml(Markdown.markdownToHtml('${label(item)}${item.content}'),
+        ..setInnerHtml(
+            Markdown.markdownToHtml(
+                '${whenWhatLabel(ce.calendarEntry)}${ce.calendarEntry.content}'),
             validator: _validator);
 
       content.querySelectorAll('a').forEach((elem) {
@@ -105,21 +107,23 @@ class UICalendar extends UIModel {
         });
       });
 
-      String start = ORUtil.humanReadableTimestamp(item.start, _weekDays);
-      String stop = ORUtil.humanReadableTimestamp(item.stop, _weekDays);
+      String start =
+          ORUtil.humanReadableTimestamp(ce.calendarEntry.start, _weekDays);
+      String stop =
+          ORUtil.humanReadableTimestamp(ce.calendarEntry.stop, _weekDays);
 
-      if (isToday(item.start) && !isToday(item.stop)) {
+      if (isToday(ce.calendarEntry.start) && !isToday(ce.calendarEntry.stop)) {
         start = '${_langMap[Key.today]} $start';
       }
 
-      if (isToday(item.stop) && !isToday(item.start)) {
+      if (isToday(ce.calendarEntry.stop) && !isToday(ce.calendarEntry.start)) {
         stop = '${_langMap[Key.today]} $stop';
       }
 
       final DivElement labelAndTimestamp = new DivElement()
         ..classes.add('label-and-timestamp')
         ..children.addAll([
-          labelElement(item),
+          labelElement(ce.calendarEntry),
           new SpanElement()
             ..classes.add('timestamp')
             ..text = '${start} - ${stop}'
@@ -127,9 +131,10 @@ class UICalendar extends UIModel {
 
       list.add(li
         ..children.addAll([content, labelAndTimestamp])
-        ..title = 'Id: ${item.ID.toString()}'
-        ..dataset['object'] = JSON.encode(item)
-        ..classes.toggle('active', item.active));
+        ..title = 'Id: ${ce.calendarEntry.ID.toString()}'
+        ..dataset['object'] = JSON.encode(ce)
+        ..dataset['editable'] = ce.editable.toString()
+        ..classes.toggle('active', ce.calendarEntry.active));
     });
 
     _list.children = list;
@@ -144,29 +149,33 @@ class UICalendar extends UIModel {
   }
 
   /**
-   * Return the first [CalendarEntry]. Return empty entry if list is empty.
+   * Return the first editable [CalendarEntry]. Return empty entry if none is
+   * found.
    */
-  ORModel.CalendarEntry get firstCalendarEntry {
-    try {
-      return new ORModel.CalendarEntry.fromMap(
-          JSON.decode(_list.children.first.dataset['object']));
-    } catch (_) {
-      return new ORModel.CalendarEntry.empty();
+  CalendarEntry get firstEditableCalendarEntry {
+    final LIElement li = _list.children.firstWhere(
+        (Element elem) => elem.dataset['editable'] == 'true',
+        orElse: () => null);
+
+    if (li != null) {
+      return new CalendarEntry.fromJson(JSON.decode(li.dataset['object']));
+    } else {
+      return new CalendarEntry.empty();
     }
   }
 
   /**
    * Return currently selected [CalendarEntry]. Return empty entry if nothing is
-   * selected.
+   * selected or if the selected item is not editable.
    */
-  ORModel.CalendarEntry get selectedCalendarEntry {
+  CalendarEntry get selectedCalendarEntry {
     final LIElement selected = _list.querySelector('.selected');
 
-    if (selected != null) {
-      return new ORModel.CalendarEntry.fromMap(
-          JSON.decode(selected.dataset['object']));
+    if (selected == null || selected.dataset['editable'] == 'true') {
+      return new CalendarEntry.empty();
     } else {
-      return new ORModel.CalendarEntry.empty();
+      return new CalendarEntry.fromJson(
+          JSON.decode(selected.dataset['object']));
     }
   }
 

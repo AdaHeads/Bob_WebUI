@@ -106,6 +106,11 @@ class UICalendarEditor extends UIModel {
   }
 
   /**
+   * Return the current author stamp.
+   */
+  String get currenntAuthorStamp => _authorStamp.text.trim();
+
+  /**
    * Harvest a [ORModel.CalendarEntry] from the form.
    */
   ORModel.CalendarEntry get harvestedEntry => _loadedEntry
@@ -263,7 +268,7 @@ class UICalendarEditor extends UIModel {
   /**
    * Populate the calendar editor fields with [calendarEntry].
    */
-  void setCalendarEntry(ORModel.CalendarEntry calendarEntry, bool isNew) {
+  void setCalendarEntry(CalendarEntry ce, bool isNew) {
     _stopDayEdit = false;
     _stopHourEdit = false;
     _stopMinuteEdit = false;
@@ -271,21 +276,21 @@ class UICalendarEditor extends UIModel {
     _stopYearEdit = false;
     _newEntry = isNew;
 
-    _loadedEntry = calendarEntry;
+    _loadedEntry = ce.calendarEntry;
 
-    _textArea.value = calendarEntry.content;
+    _textArea.value = ce.calendarEntry.content;
 
-    _startHourInput.value = calendarEntry.start.hour.toString();
-    _startMinuteInput.value = calendarEntry.start.minute.toString();
-    _startDayInput.value = calendarEntry.start.day.toString();
-    _startMonthInput.value = calendarEntry.start.month.toString();
-    _startYearInput.value = calendarEntry.start.year.toString();
+    _startHourInput.value = ce.calendarEntry.start.hour.toString();
+    _startMinuteInput.value = ce.calendarEntry.start.minute.toString();
+    _startDayInput.value = ce.calendarEntry.start.day.toString();
+    _startMonthInput.value = ce.calendarEntry.start.month.toString();
+    _startYearInput.value = ce.calendarEntry.start.year.toString();
 
-    _stopHourInput.value = calendarEntry.stop.hour.toString();
-    _stopMinuteInput.value = calendarEntry.stop.minute.toString();
-    _stopDayInput.value = calendarEntry.stop.day.toString();
-    _stopMonthInput.value = calendarEntry.stop.month.toString();
-    _stopYearInput.value = calendarEntry.stop.year.toString();
+    _stopHourInput.value = ce.calendarEntry.stop.hour.toString();
+    _stopMinuteInput.value = ce.calendarEntry.stop.minute.toString();
+    _stopDayInput.value = ce.calendarEntry.stop.day.toString();
+    _stopMonthInput.value = ce.calendarEntry.stop.month.toString();
+    _stopYearInput.value = ce.calendarEntry.stop.year.toString();
 
     _updateReadableAndDuration();
     _toggleButtons();

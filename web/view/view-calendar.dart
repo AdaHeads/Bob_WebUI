@@ -59,10 +59,10 @@ class Calendar extends ViewWidget {
   }
 
   /**
-   * Fetch all calendar entries for [contact] and [reception].
+   * Fetch all calendar entries and [WhenWhat]'s for [contact] and [reception].
    */
   void _fetchCalendar(ORModel.Contact contact, ORModel.Reception reception) {
-    final List<ORModel.CalendarEntry> allEntries = <ORModel.CalendarEntry>[];
+    final List<Model.CalendarEntry> allEntries = <Model.CalendarEntry>[];
 
     Future.wait([
       _calendarController.receptionCalendar(reception),
@@ -74,15 +74,23 @@ class Calendar extends ViewWidget {
           contact.whenWhats, new ORModel.OwningContact(contact.ID)));
 
       for (Iterable entries in responses) {
-        allEntries.addAll(entries as Iterable<ORModel.CalendarEntry>);
+        allEntries.addAll((entries as Iterable<ORModel.CalendarEntry>)
+            .map((ORModel.CalendarEntry entry) =>
+                new Model.CalendarEntry.empty()..calendarEntry = entry)
+            .toList());
       }
 
       _ui.calendarEntries = allEntries
-        ..sort((a, b) => a.start.compareTo(b.start));
+        ..sort(
+            (a, b) => a.calendarEntry.start.compareTo(b.calendarEntry.start));
     });
   }
 
-  List<ORModel.CalendarEntry> _getWhenWhats(
+  /**
+   * Return a list of [Model.CalendarEntry] based on the given
+   * [ORModel.WhenWhat] objects.
+   */
+  List<Model.CalendarEntry> _getWhenWhats(
       List<ORModel.WhenWhat> whenWhats, ORModel.Owner owner) {
     final List<ORModel.WhenWhatMatch> matches = <ORModel.WhenWhatMatch>[];
     final DateTime now = new DateTime.now();
@@ -91,12 +99,17 @@ class Calendar extends ViewWidget {
       matches.addAll(ww.matches(now));
     }
 
-    return matches
-        .map((ORModel.WhenWhatMatch match) => new ORModel.CalendarEntry.empty()
+    ORModel.CalendarEntry entry(ORModel.WhenWhatMatch match) =>
+        new ORModel.CalendarEntry.empty()
           ..beginsAt = match.begin
           ..until = match.end
           ..content = match.what
-          ..owner = owner)
+          ..owner = owner;
+
+    return matches
+        .map((ORModel.WhenWhatMatch match) => new Model.CalendarEntry.empty()
+          ..editable = false
+          ..calendarEntry = entry(match))
         .toList();
   }
 

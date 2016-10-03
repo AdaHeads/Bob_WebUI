@@ -28,7 +28,6 @@ enum Widget {
   receptionAddresses,
   receptionAltNames,
   receptionBankInfo,
-  receptionCalendar,
   receptionCommands,
   receptionEmail,
   receptionMiniWiki,
@@ -62,8 +61,6 @@ final Map<String, Destination> _destinations = {
       new Destination(Context.home, Widget.globalCallQueue),
   '${Context.home}-${Widget.messageCompose}':
       new Destination(Context.home, Widget.messageCompose),
-  '${Context.home}-${Widget.receptionCalendar}':
-      new Destination(Context.home, Widget.receptionCalendar),
   '${Context.home}-${Widget.receptionCommands}':
       new Destination(Context.home, Widget.receptionCommands),
   '${Context.home}-${Widget.receptionOpeningHours}':

@@ -24,7 +24,6 @@ class CalendarEditor extends ViewWidget {
   final Logger _log = new Logger('$libraryName.CalendarEditor');
   final Controller.Destination _myDestination;
   final Controller.Popup _popup;
-  final Model.UIReceptionCalendar _receptionCalendar;
   final Model.UIReceptionSelector _receptionSelector;
   final Model.UICalendarEditor _uiModel;
 
@@ -36,7 +35,6 @@ class CalendarEditor extends ViewWidget {
       Controller.Destination this._myDestination,
       Model.UICalendar this._calendar,
       Model.UIContactSelector this._contactSelector,
-      Model.UIReceptionCalendar this._receptionCalendar,
       Model.UIReceptionSelector this._receptionSelector,
       Controller.Calendar this._calendarController,
       Controller.Popup this._popup,
@@ -60,11 +58,7 @@ class CalendarEditor extends ViewWidget {
    */
   void _activateMe(Controller.Cmd cmd) {
     if (_receptionSelector.selectedReception != ORModel.Reception.noReception) {
-      if (_receptionCalendar.isFocused) {
-        _setup(Controller.Widget.receptionCalendar, cmd);
-      } else {
-        _setup(Controller.Widget.calendar, cmd);
-      }
+      _setup(Controller.Widget.calendar, cmd);
     }
   }
 
@@ -132,7 +126,7 @@ class CalendarEditor extends ViewWidget {
   /**
    * Render the widget with [calendarEntry].
    */
-  void _render(ORModel.CalendarEntry calendarEntry, bool isNew) {
+  void _render(Model.CalendarEntry calendarEntry, bool isNew) {
     _ui.setCalendarEntry(calendarEntry, isNew);
   }
 
@@ -155,82 +149,51 @@ class CalendarEditor extends ViewWidget {
    * [from] decides which calendar to create/edit entries for.
    */
   void _setup(Controller.Widget from, Controller.Cmd cmd) {
-    ORModel.CalendarEntry entry;
+    Model.CalendarEntry ce;
 
-    switch (from) {
-      case Controller.Widget.calendar:
-        if (cmd == Controller.Cmd.edit) {
-          entry = _calendar.selectedCalendarEntry;
+    if (from == Controller.Widget.calendar) {
+      if (cmd == Controller.Cmd.edit) {
+        ce = _calendar.selectedCalendarEntry;
 
-          if (entry.ID == ORModel.CalendarEntry.noID) {
-            entry = _calendar.firstCalendarEntry;
+        if (ce.calendarEntry == null) {
+          ce = _calendar.firstEditableCalendarEntry;
+        }
+
+        if (ce.calendarEntry != null &&
+            ce.calendarEntry.ID != ORModel.CalendarEntry.noID) {
+          final String name = ce.calendarEntry.owner is ORModel.OwningContact
+              ? _contactSelector.selectedContact.fullName
+              : _receptionSelector.selectedReception.name;
+          _ui.headerExtra = '(${_langMap[Key.editDelete]} $name)';
+
+          if (_ui.currenntAuthorStamp.isEmpty) {
+            _setAuthorStamp(ce.calendarEntry);
           }
 
-          if (entry.ID != ORModel.CalendarEntry.noID) {
-            _ui.headerExtra =
-                '(${_langMap[Key.editDelete]} ${_contactSelector.selectedContact.fullName})';
-            _setAuthorStamp(entry);
-
-            _render(entry, false);
-
-            _navigateToMyDestination();
-          }
-        } else {
-          entry = new ORModel.CalendarEntry.empty()
-            ..owner =
-                new ORModel.OwningContact(_contactSelector.selectedContact.ID)
-            ..beginsAt = new DateTime.now()
-            ..until = new DateTime.now().add(new Duration(hours: 1))
-            ..content = '';
-
-          _ui.headerExtra =
-              '(${_langMap[Key.editorNew]} ${_contactSelector.selectedContact.fullName})';
-          _ui.authorStamp(null, null);
-
-          _render(entry, true);
+          _render(ce, false);
 
           _navigateToMyDestination();
         }
-        break;
-      case Controller.Widget.receptionCalendar:
-        if (cmd == Controller.Cmd.edit) {
-          entry = _receptionCalendar.selectedCalendarEntry;
+      } else {
+        final ORModel.CalendarEntry entry = new ORModel.CalendarEntry.empty()
+          ..owner =
+              new ORModel.OwningContact(_contactSelector.selectedContact.ID)
+          ..beginsAt = new DateTime.now()
+          ..until = new DateTime.now().add(new Duration(hours: 1))
+          ..content = '';
+        ce = new Model.CalendarEntry.empty()..calendarEntry = entry;
 
-          if (entry.ID == ORModel.CalendarEntry.noID) {
-            entry = _receptionCalendar.firstCalendarEntry;
-          }
+        _ui.headerExtra =
+            '(${_langMap[Key.editorNew]} ${_contactSelector.selectedContact.fullName})';
+        _ui.authorStamp(null, null);
 
-          if (entry.ID != ORModel.CalendarEntry.noID) {
-            _ui.headerExtra =
-                '(${_langMap[Key.editDelete]} ${_receptionSelector.selectedReception.name})';
-            _setAuthorStamp(entry);
+        _render(ce, true);
 
-            _render(entry, false);
-
-            _navigateToMyDestination();
-          }
-        } else {
-          entry = new ORModel.CalendarEntry.empty()
-            ..owner = new ORModel.OwningReception(
-                _receptionSelector.selectedReception.ID)
-            ..beginsAt = new DateTime.now()
-            ..until = new DateTime.now().add(new Duration(hours: 1))
-            ..content = '';
-
-          _ui.headerExtra =
-              '(${_langMap[Key.editorNew]} ${_receptionSelector.selectedReception.name})';
-          _ui.authorStamp(null, null);
-
-          _render(entry, true);
-
-          _navigateToMyDestination();
-        }
-        break;
-      default:
-
-        /// No valid initiator. Go home.
-        _navigate.goHome();
-        break;
+        _navigateToMyDestination();
+      }
+    } else {
+      /// No valid initiator. Go home.
+      _navigate.goHome();
     }
   }
 }

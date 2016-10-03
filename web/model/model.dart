@@ -49,7 +49,6 @@ part 'ui/model-ui-orc-ready.dart';
 part 'ui/model-ui-reception-addresses.dart';
 part 'ui/model-ui-reception-alt-names.dart';
 part 'ui/model-ui-reception-bank-info.dart';
-part 'ui/model-ui-reception-calendar.dart';
 part 'ui/model-ui-reception-commands.dart';
 part 'ui/model-ui-reception-email.dart';
 part 'ui/model-ui-reception-mini-wiki.dart';
@@ -76,6 +75,24 @@ final Controller.HotKeys _hotKeys = new Controller.HotKeys();
  */
 class AllUriPolicy implements UriPolicy {
   bool allowsUri(_) => true;
+}
+
+/**
+ * Wrapping the ORModel.CalendarEntry to add various clientside necessities.
+ */
+class CalendarEntry {
+  ORModel.CalendarEntry calendarEntry;
+  bool editable = true;
+
+  CalendarEntry.empty();
+
+  CalendarEntry.fromJson(Map map) {
+    calendarEntry = new ORModel.CalendarEntry.fromMap(map['calendarEntry']);
+    editable = map['editable'];
+  }
+
+  Map<String, dynamic> toJson() =>
+      {'calendarEntry': calendarEntry, 'editable': editable};
 }
 
 /**
