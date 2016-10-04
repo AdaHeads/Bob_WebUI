@@ -19,6 +19,7 @@ part of view;
 class ReceptionSelector extends ViewWidget {
   final Model.AppClientState _appState;
   final Map<String, String> _langMap;
+  Controller.Context _latestContext;
   final Controller.Destination _myDestination;
   final Controller.Notification _notification;
   final List<ORModel.Call> _pickedUpCalls = new List<ORModel.Call>();
@@ -78,14 +79,18 @@ class ReceptionSelector extends ViewWidget {
    * Observers.
    */
   void _observers() {
-    _navigate.onGo.listen(_setWidgetState);
+    _navigate.onGo.listen((Controller.Destination destination) {
+      _latestContext = destination.context;
+      _setWidgetState(destination);
+    });
 
     _hotKeys.onAltV.listen((KeyboardEvent _) => _activateMe());
     _ui.onClick.listen((MouseEvent _) => _activateMe());
 
     _hotKeys.onCtrlAltR.listen((KeyboardEvent _) {
       final ORModel.Reception selected = _ui.selectedReception;
-      if (selected.ID != ORModel.Reception.noID) {
+      if (selected.ID != ORModel.Reception.noID &&
+          _latestContext != Controller.Context.calendarEdit) {
         _receptionController.get(selected.ID).then(_ui.refreshReception);
       }
     });

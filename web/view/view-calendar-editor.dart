@@ -39,7 +39,7 @@ class CalendarEditor extends ViewWidget {
       Controller.Calendar this._calendarController,
       Controller.Popup this._popup,
       Map<String, String> this._langMap) {
-    _ui.setHint('Esc | ctrl+backspace | ctrl+s ');
+    _ui.setHint('Esc | ctrl+backspace | ctrl+s | ctrl+alt+s');
 
     _observers();
   }
@@ -49,7 +49,13 @@ class CalendarEditor extends ViewWidget {
   @override
   void _onBlur(Controller.Destination _) {}
   @override
-  void _onFocus(Controller.Destination _) {}
+  void _onFocus(Controller.Destination destination) {
+    if (_receptionSelector.selectedReception == ORModel.Reception.noReception) {
+      _log.info('No reception selected. Navigating back to home context');
+      _navigate.goHome();
+    }
+  }
+
   @override
   Model.UICalendarEditor get _ui => _uiModel;
 
@@ -58,7 +64,46 @@ class CalendarEditor extends ViewWidget {
    */
   void _activateMe(Controller.Cmd cmd) {
     if (_receptionSelector.selectedReception != ORModel.Reception.noReception) {
-      _setup(Controller.Widget.calendar, cmd);
+      Model.CalendarEntry ce;
+
+      if (cmd == Controller.Cmd.edit) {
+        ce = _calendar.selectedCalendarEntry;
+
+        if (ce.calendarEntry == null) {
+          ce = _calendar.firstEditableCalendarEntry;
+        }
+
+        if (ce.calendarEntry != null &&
+            ce.calendarEntry.ID != ORModel.CalendarEntry.noID) {
+          final String name = ce.calendarEntry.owner is ORModel.OwningContact
+              ? _contactSelector.selectedContact.fullName
+              : _receptionSelector.selectedReception.name;
+          _ui.headerExtra = '(${_langMap[Key.editDelete]} $name)';
+
+          if (_ui.currentAuthorStamp.isEmpty) {
+            _setAuthorStamp(ce.calendarEntry);
+          }
+
+          _render(ce, false);
+
+          _navigateToMyDestination();
+        }
+      } else {
+        final ORModel.CalendarEntry entry = new ORModel.CalendarEntry.empty()
+          ..owner =
+              new ORModel.OwningContact(_contactSelector.selectedContact.ID)
+          ..beginsAt = new DateTime.now()
+          ..until = new DateTime.now().add(new Duration(hours: 1))
+          ..content = '';
+        ce = new Model.CalendarEntry.empty()..calendarEntry = entry;
+
+        _ui.headerExtra = '(${_langMap[Key.editorNew]})';
+        _ui.authorStamp(null, null);
+
+        _render(ce, true);
+
+        _navigateToMyDestination();
+      }
     }
   }
 
@@ -101,6 +146,12 @@ class CalendarEditor extends ViewWidget {
     _ui.onCancel.listen((MouseEvent _) => _close());
     _ui.onDelete.listen((MouseEvent _) async => await _delete(_ui.loadedEntry));
     _ui.onSave.listen((MouseEvent _) async => await _save(_ui.harvestedEntry));
+    _ui.onSaveReception.listen((ORModel.CalendarEntry entry) async {
+      final ORModel.Owner owner =
+          new ORModel.OwningReception(_receptionSelector.selectedReception.ID);
+      entry.owner = owner;
+      await _save(entry);
+    });
   }
 
   /**
@@ -140,60 +191,5 @@ class CalendarEditor extends ViewWidget {
         .then((ORModel.CalendarEntryChange latestChange) {
       _ui.authorStamp(latestChange.username, latestChange.changedAt);
     });
-  }
-
-  /**
-   * Setup the widget accordingly to where it was opened from. [from] MUST be
-   * the [Controller.Widget] that activated CalendarEditor.
-   *
-   * [from] decides which calendar to create/edit entries for.
-   */
-  void _setup(Controller.Widget from, Controller.Cmd cmd) {
-    Model.CalendarEntry ce;
-
-    if (from == Controller.Widget.calendar) {
-      if (cmd == Controller.Cmd.edit) {
-        ce = _calendar.selectedCalendarEntry;
-
-        if (ce.calendarEntry == null) {
-          ce = _calendar.firstEditableCalendarEntry;
-        }
-
-        if (ce.calendarEntry != null &&
-            ce.calendarEntry.ID != ORModel.CalendarEntry.noID) {
-          final String name = ce.calendarEntry.owner is ORModel.OwningContact
-              ? _contactSelector.selectedContact.fullName
-              : _receptionSelector.selectedReception.name;
-          _ui.headerExtra = '(${_langMap[Key.editDelete]} $name)';
-
-          if (_ui.currenntAuthorStamp.isEmpty) {
-            _setAuthorStamp(ce.calendarEntry);
-          }
-
-          _render(ce, false);
-
-          _navigateToMyDestination();
-        }
-      } else {
-        final ORModel.CalendarEntry entry = new ORModel.CalendarEntry.empty()
-          ..owner =
-              new ORModel.OwningContact(_contactSelector.selectedContact.ID)
-          ..beginsAt = new DateTime.now()
-          ..until = new DateTime.now().add(new Duration(hours: 1))
-          ..content = '';
-        ce = new Model.CalendarEntry.empty()..calendarEntry = entry;
-
-        _ui.headerExtra =
-            '(${_langMap[Key.editorNew]} ${_contactSelector.selectedContact.fullName})';
-        _ui.authorStamp(null, null);
-
-        _render(ce, true);
-
-        _navigateToMyDestination();
-      }
-    } else {
-      /// No valid initiator. Go home.
-      _navigate.goHome();
-    }
   }
 }

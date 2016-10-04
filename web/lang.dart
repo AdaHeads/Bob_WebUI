@@ -20,6 +20,7 @@ abstract class Key {
   static const String active = 'active';
   static const String agent = 'agent';
 
+  static const String calendarEditorAreYouSure = 'calendar-editor-are-you-sure';
   static const String calendarEditorDelErrorTitle = 'calendar-editor-del-error';
   static const String calendarEditorDelSuccessTitle =
       'calendar-editor-del-success';
@@ -167,6 +168,7 @@ abstract class Key {
   static const String receptionWebsitesHeader = 'reception-websites-header';
 
   static const String save = 'save';
+  static const String saveReception = 'save-reception';
   static const String saved = 'saved';
   static const String send = 'send';
   static const String sent = 'sent';
@@ -195,6 +197,7 @@ Map<String, String> da = {
   Key.active: 'Aktive',
   Key.agent: 'Agent',
 
+  Key.calendarEditorAreYouSure: 'Er du sikker?',
   Key.calendarEditorDelErrorTitle: 'Kalenderaftalen blev ikke slettet',
   Key.calendarEditorDelSuccessTitle: 'Kalenderaftalen blev slettet',
   Key.calendarEditorHeader: 'Kalenderaftale',
@@ -256,7 +259,7 @@ Map<String, String> da = {
   Key.duration: 'Varighed',
 
   Key.editDelete: 'ret/slet for',
-  Key.editorNew: 'ny for',
+  Key.editorNew: 'ny',
   Key.error: 'fejl',
   Key.errorCallControllerBusy: 'Kaldhåndtering midlertidigt optaget',
   Key.errorCallHangup: 'Kaldet kunne ikke afbrydes',
@@ -330,6 +333,7 @@ Map<String, String> da = {
   Key.receptionWebsitesHeader: 'WWW',
 
   Key.save: 'Gem',
+  Key.saveReception: 'Gem (reception)',
   Key.saved: 'Gemt',
   Key.send: 'Send',
   Key.sent: 'Sendt',
@@ -359,6 +363,7 @@ Map<String, String> en = {
   Key.active: 'Active',
   Key.agent: 'Agent',
 
+  Key.calendarEditorAreYouSure: 'Are you certain?',
   Key.calendarEditorDelErrorTitle: 'Calendar entry not deleted',
   Key.calendarEditorDelSuccessTitle: 'Calendar entry deleted',
   Key.calendarEditorHeader: 'Calendar event',
@@ -420,7 +425,7 @@ Map<String, String> en = {
   Key.duration: 'Duration',
 
   Key.editDelete: 'edit/delete for',
-  Key.editorNew: 'new for',
+  Key.editorNew: 'new',
   Key.error: 'error',
   Key.errorCallControllerBusy: 'Call handling temporarily busy',
   Key.errorCallHangup: 'Hangup failed',
@@ -494,6 +499,7 @@ Map<String, String> en = {
   Key.receptionWebsitesHeader: 'WWW',
 
   Key.save: 'Save',
+  Key.saveReception: 'Save (reception)',
   Key.saved: 'Saved',
   Key.send: 'Send',
   Key.sent: 'Sent',

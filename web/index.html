@@ -151,9 +151,13 @@
 
             #calendar-editor .entry-buttons-container button {
               height: 2em;
-              width: 5em;
+              min-width: 5em;
               margin-left: 1em;
               font-size: 1em;
+            }
+
+            #calendar-editor .entry-buttons-container button.first-click {
+              background-color: red;
             }
 
             #calendar-editor input {
@@ -216,6 +220,7 @@
               <button class="cancel" tabindex="-1" data-lang-text="cancel">::cancel::</button>
               <button class="delete" disabled tabindex="-1" data-lang-text="delete">::delete::</button>
               <button class="save" disabled tabindex="-1" data-lang-text="save">::save::</button>
+              <button class="save-reception" disabled tabindex="-1" data-lang-text="save-reception">::save-reception::</button>
             </div>
           </div>
         </div>

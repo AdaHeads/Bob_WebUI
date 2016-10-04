@@ -131,7 +131,9 @@ class UICalendar extends UIModel {
 
       list.add(li
         ..children.addAll([content, labelAndTimestamp])
-        ..title = 'Id: ${ce.calendarEntry.ID.toString()}'
+        ..title = ce.calendarEntry.ID == ORModel.CalendarEntry.noID
+            ? 'WhenWhat'
+            : 'Id: ${ce.calendarEntry.ID.toString()}'
         ..dataset['object'] = JSON.encode(ce)
         ..dataset['editable'] = ce.editable.toString()
         ..classes.toggle('active', ce.calendarEntry.active));
@@ -171,7 +173,7 @@ class UICalendar extends UIModel {
   CalendarEntry get selectedCalendarEntry {
     final LIElement selected = _list.querySelector('.selected');
 
-    if (selected == null || selected.dataset['editable'] == 'true') {
+    if (selected == null || selected.dataset['editable'] != 'true') {
       return new CalendarEntry.empty();
     } else {
       return new CalendarEntry.fromJson(
