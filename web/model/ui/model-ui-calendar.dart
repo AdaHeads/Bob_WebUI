@@ -132,7 +132,7 @@ class UICalendar extends UIModel {
       list.add(li
         ..children.addAll([content, labelAndTimestamp])
         ..title = ce.calendarEntry.ID == ORModel.CalendarEntry.noID
-            ? 'WhenWhat'
+            ? 'WhenWhat - ${_langMap[Key.lockedForEditing]}'
             : 'Id: ${ce.calendarEntry.ID.toString()}'
         ..dataset['object'] = JSON.encode(ce)
         ..dataset['editable'] = ce.editable.toString()

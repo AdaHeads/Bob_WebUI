@@ -106,6 +106,8 @@ abstract class Key {
 
   static const String globalCallQueueHeader = 'global-call-queue-header';
 
+  static const String lockedForEditing = 'locked-for-editing';
+
   static const String message = 'message';
   static const String messageArchiveContact = 'message-archive-contact';
   static const String messageArchiveHeader = 'message-archive-header';
@@ -277,6 +279,8 @@ Map<String, String> da = {
 
   Key.globalCallQueueHeader: 'Kø',
 
+  Key.lockedForEditing: 'låst for rettelser',
+
   Key.message: 'Besked',
   Key.messageArchiveContact: 'Modtager',
   Key.messageArchiveHeader: 'Beskedarkiv',
@@ -442,6 +446,8 @@ Map<String, String> en = {
   Key.future: 'future',
 
   Key.globalCallQueueHeader: 'Queue',
+
+  Key.lockedForEditing: 'locked for editing',
 
   Key.message: 'Message',
   Key.messageArchiveContact: 'Recipient',

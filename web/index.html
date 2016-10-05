@@ -151,13 +151,17 @@
 
             #calendar-editor .entry-buttons-container button {
               height: 2em;
-              min-width: 5em;
+              width: 5em;
               margin-left: 1em;
               font-size: 1em;
             }
 
+            #calendar-editor .entry-buttons-container button.wide-button {
+              width: 10em;
+            }
+
             #calendar-editor .entry-buttons-container button.first-click {
-              background-color: red;
+              background-color: #ff5621;
             }
 
             #calendar-editor input {
@@ -220,7 +224,7 @@
               <button class="cancel" tabindex="-1" data-lang-text="cancel">::cancel::</button>
               <button class="delete" disabled tabindex="-1" data-lang-text="delete">::delete::</button>
               <button class="save" disabled tabindex="-1" data-lang-text="save">::save::</button>
-              <button class="save-reception" disabled tabindex="-1" data-lang-text="save-reception">::save-reception::</button>
+              <button class="wide-button save-reception" disabled tabindex="-1" data-lang-text="save-reception">::save-reception::</button>
             </div>
           </div>
         </div>
@@ -876,7 +880,7 @@
               <div id="reception-selector" class="generic-widget">
                 <style scoped>
                   #reception-selector {
-                    flex-grow: 0.7;
+                    flex-grow: 0.6;
                   }
 
                   #reception-selector .generic-widget-body div {
