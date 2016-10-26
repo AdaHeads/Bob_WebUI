@@ -62,27 +62,36 @@ class Calendar extends ViewWidget {
    * Fetch all calendar entries and [WhenWhat]'s for [contact] and [reception].
    */
   void _fetchCalendar(ORModel.Contact contact, ORModel.Reception reception) {
-    final List<Model.CalendarEntry> allEntries = <Model.CalendarEntry>[];
+    final List<Model.CalendarEntry> entries = <Model.CalendarEntry>[];
+    final List<Model.CalendarEntry> whenWhats = <Model.CalendarEntry>[];
 
     Future.wait([
       _calendarController.receptionCalendar(reception),
       _calendarController.contactCalendar(contact)
     ]).then((List responses) {
-      allEntries.addAll(_getWhenWhats(
-          reception.whenWhats, new ORModel.OwningReception(reception.ID)));
-      allEntries.addAll(_getWhenWhats(
-          contact.whenWhats, new ORModel.OwningContact(contact.ID)));
-
-      for (Iterable entries in responses) {
-        allEntries.addAll((entries as Iterable<ORModel.CalendarEntry>)
+      for (Iterable response in responses) {
+        entries.addAll((response as Iterable<ORModel.CalendarEntry>)
             .map((ORModel.CalendarEntry entry) =>
                 new Model.CalendarEntry.empty()..calendarEntry = entry)
             .toList());
       }
 
-      _ui.calendarEntries = allEntries
-        ..sort(
-            (a, b) => a.calendarEntry.start.compareTo(b.calendarEntry.start));
+      entries.sort(
+          (a, b) => a.calendarEntry.start.compareTo(b.calendarEntry.start));
+
+      final bool activeEntry = entries
+          .any((Model.CalendarEntry entry) => entry.calendarEntry.active);
+
+      whenWhats.addAll(_getWhenWhats(activeEntry, reception.whenWhats,
+          new ORModel.OwningReception(reception.ID)));
+      whenWhats.addAll(_getWhenWhats(activeEntry, contact.whenWhats,
+          new ORModel.OwningContact(contact.ID)));
+      whenWhats.sort(
+          (a, b) => a.calendarEntry.start.compareTo(b.calendarEntry.start));
+
+      entries.addAll(whenWhats);
+
+      _ui.calendarEntries = entries;
     });
   }
 
@@ -90,7 +99,7 @@ class Calendar extends ViewWidget {
    * Return a list of [Model.CalendarEntry] based on the given
    * [ORModel.WhenWhat] objects.
    */
-  List<Model.CalendarEntry> _getWhenWhats(
+  List<Model.CalendarEntry> _getWhenWhats(bool otherActiveEntry,
       List<ORModel.WhenWhat> whenWhats, ORModel.Owner owner) {
     final List<ORModel.WhenWhatMatch> matches = <ORModel.WhenWhatMatch>[];
     final DateTime now = new DateTime.now();
@@ -109,6 +118,7 @@ class Calendar extends ViewWidget {
     return matches
         .map((ORModel.WhenWhatMatch match) => new Model.CalendarEntry.empty()
           ..editable = false
+          ..otherActiveWarning = otherActiveEntry
           ..calendarEntry = entry(match))
         .toList();
   }

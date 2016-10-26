@@ -83,16 +83,21 @@ class AllUriPolicy implements UriPolicy {
 class CalendarEntry {
   ORModel.CalendarEntry calendarEntry;
   bool editable = true;
+  bool otherActiveWarning = false;
 
   CalendarEntry.empty();
 
   CalendarEntry.fromJson(Map map) {
     calendarEntry = new ORModel.CalendarEntry.fromMap(map['calendarEntry']);
     editable = map['editable'];
+    otherActiveWarning = map['otherActiveWarning'];
   }
 
-  Map<String, dynamic> toJson() =>
-      {'calendarEntry': calendarEntry, 'editable': editable};
+  Map<String, dynamic> toJson() => {
+        'calendarEntry': calendarEntry,
+        'editable': editable,
+        'otherActiveWarning': otherActiveWarning
+      };
 }
 
 /**
