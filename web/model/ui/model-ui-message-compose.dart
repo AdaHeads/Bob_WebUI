@@ -230,10 +230,10 @@ class UIMessageCompose extends UIModel {
     /// Flash alert if user is trying to pickup a new call while there is data
     /// in the message compose widget.
     _hotKeys.onNumPlus.listen((_) {
-      if(!noMessage && !_root.classes.contains('message-compose-alert')) {
+      if (!noMessage && !_root.classes.contains('message-compose-alert')) {
         _root.classes.toggle('message-compose-alert', true);
         new Future.delayed(new Duration(seconds: 2), () {
-        _root.classes.toggle('message-compose-alert', false);  
+          _root.classes.toggle('message-compose-alert', false);
         });
       }
       _root.classes.toggle('message-compose-alert', !noMessage);
