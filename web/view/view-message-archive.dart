@@ -187,8 +187,8 @@ class MessageArchive extends ViewWidget {
   void _observers() {
     _navigate.onGo.listen(_setWidgetState);
 
-    _messageCompose.onSave.listen((MouseEvent _) => _ui.headerExtra = '');
-    _messageCompose.onSend.listen((MouseEvent _) => _ui.headerExtra = '');
+    _messageCompose.onSave.listen((_) => _ui.headerExtra = '');
+    _messageCompose.onSend.listen((_) => _ui.headerExtra = '');
 
     _ui.onClick.listen(_activateMe);
 

@@ -165,8 +165,8 @@ class MessageCompose extends ViewWidget {
       }
     });
 
-    _ui.onSave.listen((MouseEvent _) async => await _save(_message));
-    _ui.onSend.listen((MouseEvent _) async => await _send(_message));
+    _ui.onSave.listen((_) async => await _save(_message));
+    _ui.onSend.listen((_) async => await _send(_message));
 
     _uiMessageArchive.onMessageCopy.listen((ORModel.Message msg) {
       /**

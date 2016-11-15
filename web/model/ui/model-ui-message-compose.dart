@@ -21,6 +21,10 @@ class UIMessageCompose extends UIModel {
   HtmlElement _myFocusElement;
   HtmlElement _myLastTabElement;
   final DivElement _myRoot;
+  final Bus<bool> _saveBus = new Bus<bool>();
+  int _saveButtonClickCount = 0;
+  final Bus<bool> _sendBus = new Bus<bool>();
+  int _sendButtonClickCount = 0;
 
   /**
    * Constructor.
@@ -206,6 +210,22 @@ class UIMessageCompose extends UIModel {
    * Observers.
    */
   void _observers() {
+    saveButton.onClick.listen((_) {
+      _saveButtonClickCount++;
+      if (_saveButtonClickCount < 2) {
+        _saveBus.fire(true);
+        saveButton.disabled = true;
+      }
+    });
+
+    sendButton.onClick.listen((_) {
+      _sendButtonClickCount++;
+      if (_sendButtonClickCount < 2) {
+        _sendBus.fire(true);
+        sendButton.disabled = true;
+      }
+    });
+
     _root.onKeyDown.listen(_keyboard.press);
 
     _root.onMouseDown.listen(_focusFromClick);
@@ -254,14 +274,14 @@ class UIMessageCompose extends UIModel {
   }
 
   /**
-   * Return the click event stream for the save button.
+   * Fires true when save is clicked
    */
-  Stream<MouseEvent> get onSave => saveButton.onClick;
+  Stream<bool> get onSave => _saveBus.stream;
 
   /**
-   * Return the click event stream for the send button.
+   * Fires true when send is clicked
    */
-  Stream<MouseEvent> get onSend => sendButton.onClick;
+  Stream<bool> get onSend => _sendBus.stream;
 
   /**
    * Return the Set of [ORModel.MessageRecipient]. May return the empty set.
@@ -352,6 +372,9 @@ class UIMessageCompose extends UIModel {
     _myFirstTabElement = _callerNameInput;
     _myLastTabElement = _urgentInput;
 
+    resetSaveButton();
+    resetSendButton();
+
     _toggleButtons();
 
     if (pristine) {
@@ -362,6 +385,22 @@ class UIMessageCompose extends UIModel {
       _showRecipientsText.hidden = true;
       _showNoRecipientsText.hidden = false;
     }
+  }
+
+  /**
+   * Resets the save button to its original state.
+   */
+  void resetSaveButton() {
+    _saveButtonClickCount = 0;
+    saveButton.disabled = false;
+  }
+
+  /**
+   * Resets the send button to its original state.
+   */
+  void resetSendButton() {
+    _sendButtonClickCount = 0;
+    sendButton.disabled = false;
   }
 
   /**
