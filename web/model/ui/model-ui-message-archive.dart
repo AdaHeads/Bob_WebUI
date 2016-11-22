@@ -17,7 +17,7 @@ part of model;
  * Provides access to the MessageArchive UX components.
  */
 class UIMessageArchive extends UIModel {
-  ORModel.MessageContext _currentContext;
+  ORModel.MessageContext currentContext;
   final Map<String, String> _langMap;
   final Bus<ORModel.Message> _messageCloseBus = new Bus<ORModel.Message>();
   final Bus<ORModel.Message> _messageCopyBus = new Bus<ORModel.Message>();
@@ -188,15 +188,6 @@ class UIMessageArchive extends UIModel {
   }
 
   /**
-   * Set the current message context. This MUST be defined by the currently selected reception and
-   * contact. It is used to decide whether delete/close actions move the message in question from
-   * the saved list to the not saved list.
-   */
-  set context(ORModel.MessageContext context) {
-    _currentContext = context;
-  }
-
-  /**
    * Return the String status of [msg].
    */
   String _getStatus(ORModel.Message msg) {
@@ -236,7 +227,7 @@ class UIMessageArchive extends UIModel {
         if (event.propertyName == 'opacity') {
           tr.remove();
           _savedTbody.parent.hidden = _savedTbody.children.isEmpty;
-          if (_currentContext == message.context) {
+          if (currentContext == message.context) {
             _notSavedTbody.insertBefore(
                 _buildRow(message, false), _notSavedTbody.firstChild);
           }

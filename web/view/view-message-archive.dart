@@ -64,7 +64,7 @@ class MessageArchive extends ViewWidget {
 
   @override
   void _onFocus(Controller.Destination _) {
-    _ui.context = new ORModel.MessageContext.empty()
+    ORModel.MessageContext context = new ORModel.MessageContext.empty()
       ..contactID = _contactSelector.selectedContact.ID
       ..receptionID = _receptionSelector.selectedReception.ID;
 
@@ -72,6 +72,8 @@ class MessageArchive extends ViewWidget {
         '(${_contactSelector.selectedContact.fullName} @ ${_receptionSelector.selectedReception.name})';
 
     if (_receptionSelector.selectedReception == ORModel.Reception.noReception) {
+      context = new ORModel.MessageContext.empty();
+      _ui.currentContext = context;
       header = '';
       _ui.headerExtra = '';
       _ui.clearNotSavedList();
@@ -83,7 +85,8 @@ class MessageArchive extends ViewWidget {
       _messageController.list(_savedFilter).then(
           (Iterable<ORModel.Message> messages) => _ui.savedMessages = messages);
 
-      if (header != _ui.header) {
+      if (context != _ui.currentContext) {
+        _ui.currentContext = context;
         _ui.headerExtra = header;
         _ui.clearNotSavedList();
         if (_receptionSelector.selectedReception.isNotEmpty &&
