@@ -329,7 +329,11 @@ class MyCallQueue extends ViewWidget {
     });
 
     /// Make call
-    _hotKeys.onNumMult.listen((KeyboardEvent _) => _setRinging());
+    _hotKeys.onNumMult.listen((_) {
+      if (_homeIsFocused) {
+        _setRinging();
+      }
+    });
     _contactData.onMarkedRinging.listen(_call);
 
     _notification.onAnyCallStateChange.listen(_handleCallStateChanges);
