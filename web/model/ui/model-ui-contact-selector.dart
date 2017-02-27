@@ -89,6 +89,8 @@ class UIContactSelector extends UIModel {
       final List<String> departments = <String>[]..addAll(item.departments);
       final List<String> tags = <String>[]
         ..addAll(item.tags)
+        ..addAll(
+            item.phones.map((ORModel.PhoneNumber pn) => 'tlf:${pn.endpoint}'))
         ..add(item.fullName); // treat name as any other normal tag.
       final List<String> titles = <String>[]..addAll(item.titles);
 
